@@ -1,0 +1,18 @@
+{
+  "name": "soulboundtokens",
+  "version": "1.0.0",
+  "description": "A decentralized web application for managing Soulbound tokens on the Ethereum blockchain.",
+  "main": "app.js",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
