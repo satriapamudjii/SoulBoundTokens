@@ -18,7 +18,6 @@ class Token(db.Model):
 class TokenSchema(ma.Schema):
     class Meta:
         fields = ('id', 'token')
-
 token_schema = TokenSchema()
 tokens_schema = TokenSchema(many=True)
 
@@ -33,13 +32,24 @@ def add_token():
 @app.route('/token', methods=['GET'])
 def get_tokens():
     all_tokens = Token.query.all()
-    result = tokens=$schema.dump(all_tokens)
+    result = tokens_schema.dump(all_tokens)
     return jsonify(result)
 
 @app.route('/token/<id>', methods=['GET'])
 def verify_token(id):
     token = Token.query.get(id)
     if token:
+        return token_schema.jsonify(token)
+    else:
+        return jsonify({"message": "Token not found"}), 404
+
+@app.route('/token/<id>', methods=['PUT'])
+def update_token(id):
+    token = Token.query.get(id)
+    if token:
+        new_token_data = request.json['token']
+        token.token = new_token_data
+        db.session.commit()
         return token_schema.jsonify(token)
     else:
         return jsonify({"message": "Token not found"}), 404
