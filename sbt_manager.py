@@ -15,11 +15,11 @@ web3 = Web3(Web3.HTTPProvider(INFURA_URL))
 
 def deploy_contract():
     try:
-        compiled_contract_path = 'path_to_compiled_contract'
-        deployed_contract_address = web3.eth.contract(
-            abi=CONTRACT_ABI,
-            bytecode=compiled_contract_path)  # Assuming bytecode is from compiled_contract_path; adjust accordingly
-        tx_dict = deployed_contract_address.constructor().buildTransaction({
+        with open('path_to_compiled_contract_bytecode', 'r') as file:
+            bytecode = file.read()
+
+        deployed_contract = web3.eth.contract(abi=CONTRACT_ABI, bytecode=bytecode)
+        tx_dict = deployed_contract.constructor().buildTransaction({
             'from': OWNER_ADDRESS,
             'nonce': web3.eth.get_transaction_count(OWNER_ADDRESS),
             'gasPrice': web3.eth.gas_price,
@@ -61,6 +61,9 @@ def transfer_token(from_address, to_address):
             'nonce': nonce,
             'from': from_address
         })
+        if not contract.functions.isNonTransferable().call():
+            print("This token cannot be transferred as it is soulbound.")
+            return None
         signed_tx = web3.eth.account.sign_transaction(tx_dict, PRIVATE_KEY)
         tx_hash = web3.eth.send_raw_transaction(signed_tx.rawTransaction)
         return web3.toHex(tx_hash)
@@ -71,7 +74,7 @@ def transfer_token(from_address, to_address):
 def verify_ownership(owner_address, token_id):
     try:
         contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
-        return contract.functions.ownerOf(token_id).call() ==  owner_address
+        return contract.functions.ownerOf(token_id).call() == owner_address
     except Exception as e:
         print(f"An error occurred during ownership verification: {e}")
         return False
