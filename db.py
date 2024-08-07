@@ -19,8 +19,13 @@ def get_db_connection():
         if e.connection_invalidated:
             print("Database connection was invalidated!")
         else:
-            print("Database error:", e)
+            print("A database error occurred:", e)
+        db_session.rollback()
     except exc.SQLAlchemyError as e:
-        print("An error occurred with SQLAlchemy:", e)
+        print("An SQLAlchemy error occurred:", e)
+        db_session.rollback()
+    except Exception as e:
+        print("An unexpected error occurred:", e)
+        db_session.rollback()
     finally:
         db_session.close()
