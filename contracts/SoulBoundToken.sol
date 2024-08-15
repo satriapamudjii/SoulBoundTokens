@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -11,9 +12,22 @@ contract SoulboundToken is ERC721, Ownable {
     uint256 private _currentTokenID = 0;
 
     function issue(address to) public onlyOwner {
-        uint256 newTokenId = _currentTokenID++;
-        _safeMint(to, newTokenId);
-        emit Issue(to, newTokenId);
+        uint256 newTokenId = _getNextTokenID();
+        _incrementTokenID();
+        _safeMintToken(to, newTokenId);
+    }
+
+    function _safeMintToken(address to, uint256 tokenId) internal {
+        _safeMint(to, tokenId);
+        emit Issue(to, tokenId);
+    }
+
+    function _getNextTokenID() internal view returns (uint256) {
+        return _currentTokenID;
+    }
+
+    function _incrementTokenID() internal {
+        _currentTokenID++;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override {
