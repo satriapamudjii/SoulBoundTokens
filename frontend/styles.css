@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.token-issue-form {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+.token-issue-form label,
+.token-issue-form input,
+.token-issue-form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.token-issue-form button {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.token-issue-form button:hover {
+    background-color: #4cae4c;
+}
+
+.token-list {
+    margin-top: 20px;
+}
+
+.token-item {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+.token-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+.verify-token-form {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+.verify-token-form label,
+.verify-token-form input,
+.verify-token-form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.verify-token-form button {
+    background-color: #0275d8;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.verify-token-form button:hover {
+    background-color: #025aa5;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .token-issue-form, .verify-token-form {
+        padding: 10px;
+    }
+
+    .token-item, .token-details {
+        padding: 10px;
+    }
+}
