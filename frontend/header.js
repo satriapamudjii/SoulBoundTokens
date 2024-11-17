@@ -1,55 +1,56 @@
-import React, { Component } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
+const DataContext = createContext();
 
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true };
-  }
+export const useData = () => useContext(DataContext);
 
-  componentDidCatch(error, errorInfo) {
-    // You can log the error to an error reporting service
-    console.log(error, errorInfo);
-  }
+export const DataProvider = ({ children }) => {
+  const [data, setData] = useState({});
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log('Fetch and set data from API');
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
 
-  render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
-    }
+    fetchData();
+  }, []);
 
-    return this.props.children; 
-  }
-}
-```
+  return (
+    <DataContext.Provider value={{ data }}>
+      {children}
+    </DataContext.Provider>
+  );
+};
 
-```javascript
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Header from './Header'; // Assuming Header is in the same directory
+import Header from './Header';
 import Home from './Home';
 import About from './About';
 import Services from './Services';
 import Contact from './Contact';
-import ErrorBoundary from './ErrorBoundary'; // Make sure to import the ErrorBoundary component
+import ErrorBoundary from './ErrorBoundary';
+import { DataProvider } from './DataContext';
 
 const App = () => {
   return (
     <Router>
-      <ErrorBoundary>
-        <Header />
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/services" component={Services} />
-          <Route path="/contact" component={Contact} />
-          {/* You can add a fallback route here for unmatched paths */}
-          <Route render={() => <h1>404: Page Not Found</h1>} />
-        </Switch>
-      </ErrorBoundary>
+      <DataProvider>
+        <ErrorBoundary>
+          <Header />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/about" component={About} />
+            <Route path="/services" component={Services} />
+            <Route path="/contact" component={Contact} />
+            <Route render={() => <h1>404: Page Not Found</h1>} />
+          </Switch>
+        </ErrorBoundary>
+      </DataProvider>
     </Router>
   );
 };
