@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
 
 const IssueTokenForm = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     tokenName: '',
     metadata: '',
     ownerAddress: '',
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const validateFormData = ({tokenName, metadata, ownerAddress}) => {
+  const validateFormData = ({ tokenName, metadata, ownerAddress }) => {
     const errors = {};
-    if (!tokenName.trim()) errors.tokenName = "Token name is required.";
-    if (!metadata.trim()) errors.metadata = "Metadata is required.";
-    if (!ownerAddress.trim()) errors.ownerAddress = "Owner address is required.";
-    if (!/^0x[a-fA-F0-9]{40}$/.test(ownerAddress)) errors.ownerAddress = "Invalid Ethereum address.";
+    if (!tokenName.trim()) {
+      errors.tokenName = "Token name is required.";
+    }
+    if (!metadata.trim()) {
+      errors.metadata = "Metadata is required.";
+    }
+    if (!ownerAddress.trim()) {
+      errors.ownerAddress = "Owner address is required.";
+    }
+    const isValidEthereumAddress = /^0x[a-fA-F0-9]{40}$/.test(ownerAddress);
+    if (!isValidEthereumAddress) {
+      errors.ownerAddress = "Invalid Ethereum address.";
+    }
     return errors;
   };
 
@@ -29,12 +40,7 @@ const IssueTokenForm = () => {
     const errors = validateFormData(formData);
     if (Object.keys(errors).length === 0) {
       console.log("Form Data:", formData);
-      
-      setFormData({
-        tokenName: '',
-        metadata: '',
-        ownerAddress: '',
-      });
+      setFormData(initialFormData);
     } else {
       console.error("Validation Errors:", errors);
     }
